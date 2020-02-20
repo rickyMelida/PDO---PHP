@@ -1,10 +1,9 @@
 <?php
-    $db_host = 'localhost';
-    $db_nombre = 'personal';
-    $db_usuario = 'root';
-    $db_pass = '';
+    require_once './datosDB.php';
     
-    $para = 'Ricardo';
+    $nombre = $_POST['nombre'];
+    $apellido = $_POST['apellido'];
+    $edad = $_POST['edad'];
 
     $con = mysqli_connect($db_host, $db_usuario, $db_pass);
 
@@ -17,24 +16,24 @@
 
     mysqli_set_charset($con, 'utf8');
 
-    $sql = "SELECT nombre, apellido, edad from datos where nombre = ?";
+    $sql = "INSERT into datos (nombre, apellido, edad) values (?, ?, ?)";
 
     $resultado = mysqli_prepare($con, $sql);
 
-    $ok = mysqli_stmt_bind_param($resultado, "s", $para);
+    $ok = mysqli_stmt_bind_param($resultado, "sss", $nombre, $apellido, $edad);
 
     $ok = mysqli_stmt_execute($resultado);
 
     if($ok == false) {
         echo 'Error al ejecutar la consulta';
     }else {
-        $ok = mysqli_stmt_bind_result($resultado, $nombre, $apellido, $edad);
+        //$ok = mysqli_stmt_bind_result($resultado, $nombreR, $apellidoR, $edadR);
 
-        echo 'Articulos encontrados: <br><br>';
+        echo 'Agregado nuevo registro';
 
-        while(mysqli_stmt_fetch($resultado)) {
+        /*while(mysqli_stmt_fetch($resultado)) {
             echo $nombre . ' ' . $apellido . ' ' . $edad . '<br>';
-        }
+        }*/
 
         mysqli_stmt_close($resultado);
     }
